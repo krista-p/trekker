@@ -1,8 +1,7 @@
-import './App.css';
 
 function App() {
   return (
-    <div className="app">
+    <div className="text-green-700">
       Trekker App
     </div>
   );
