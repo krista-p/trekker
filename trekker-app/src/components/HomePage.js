@@ -18,9 +18,9 @@ const HomePage = () => {
   return (
     <div>
       <Navbar />
-      <div class="flex px-8">
-        <MapHome starts={starts} class="h-screen w-screen" />
-        <ListHome starts={starts} class="" />
+      <div className="flex px-8 p-4">
+        <MapHome starts={starts} className="h-screen w-screen" />
+        <ListHome starts={starts} className="w-200" />
       </div>
     </div>
   );

@@ -98,7 +98,7 @@ const MapHome = ( {starts} ) => {
   }, []);
 
   return (
-  <div class="w-screen h-screen" ref={mapContainerRef} />
+  <div className="w-screen h-screen" ref={mapContainerRef} />
   );
 };
 

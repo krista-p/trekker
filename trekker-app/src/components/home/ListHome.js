@@ -1,8 +1,16 @@
+import ListItemHome from "./ListItemHome"
 
-const ListHome = () => {
+const ListHome = ( {starts} ) => {
   return (
-    <div>
-      This is where the list will be.
+    <div className="pl-4">
+      <ul>
+        <li>
+          {starts.map((start) => {
+            return (<ListItemHome start={start} />)
+          })
+          }
+        </li>
+      </ul>
     </div>
   );
 }
