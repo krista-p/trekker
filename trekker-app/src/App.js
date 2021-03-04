@@ -4,7 +4,6 @@ import CreatePage from './components/CreatePage';
 import RouteDetail from './components/RouteDetail';
 import NotFoundPage from './components/NotFoundPage';
 
-
 const App = () => {
   return (
     <main>
