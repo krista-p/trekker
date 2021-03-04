@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
@@ -7,7 +7,7 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwN
 
 const MapHome = ( {starts} ) => {
   
-  const mapContainerRef = useRef(null);
+  const mapContainerRef = useRef();
 
   // initialize map when component mounts
   useEffect(() => {
@@ -35,7 +35,7 @@ const MapHome = ( {starts} ) => {
                 geometry: {
                   id: start._id,
                   type: 'Point',
-                  coordinates: [start.location.coordinates[0], start.location.coordinates[1]]
+                  coordinates: [start.location.start[0], start.location.start[1]]
                 }
               }
             )),
@@ -82,20 +82,20 @@ const MapHome = ( {starts} ) => {
       });
     };
 
-    // invoke the map function
-    showMap();
-
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-
+    
     // add search feature, when queried, map goes to the new location
     map.addControl(new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     }));
 
+    // invoke the map function
+    showMap();
+
     return () => map.remove();
-  }, []);
+  });
 
   return (
   <div className="w-screen h-screen" ref={mapContainerRef} />

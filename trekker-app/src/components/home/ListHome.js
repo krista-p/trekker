@@ -6,7 +6,7 @@ const ListHome = ( {starts} ) => {
       <ul>
         <li>
           {starts.map((start) => {
-            return (<ListItemHome start={start} />)
+            return (<ListItemHome start={start} key={start._id} />)
           })
           }
         </li>

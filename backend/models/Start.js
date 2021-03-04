@@ -1,22 +1,18 @@
 
 const mongoose = require('mongoose');
-const geoCoder = require('../utils/geocoder');
+//const geoCoder = require('../utils/geocoder');
 
 const StartSchema = new mongoose.Schema({
-  address: {
-    type: String,
-    required: [true, 'Please add a starting address']
-  },
   location: {
     type: {
       type: String,
       enum: ['Point']
     },
-    coordinates: {
+    start: {
       type: [Number],
       index: '2dsphere'
     },
-    formattedAddress: String
+    //formattedAddress: String
   },
   createdAt: {
     type: Date,
@@ -25,18 +21,18 @@ const StartSchema = new mongoose.Schema({
 });
 
 // Before saving, convert address to geoCode
-StartSchema.pre('save', async function(next) {
-  const loc = await geoCoder.geocode(this.address);
-  this.location = {
-      type: 'Point',
-      coordinates: [loc[0].longitude, loc[0].latitude],
-      formattedAddress: loc[0].formattedAddress
-  };
+// StartSchema.pre('save', async function(next) {
+//   const loc = await geoCoder.geocode(this.address);
+//   this.location = {
+//       type: 'Point',
+//       start: [loc[0].longitude, loc[0].latitude],
+//       formattedAddress: loc[0].formattedAddress
+//   };
 
-  // Do not save address
-  this.address = undefined;
-  next();
-});
+//   // Do not save address
+//   this.address = undefined;
+//   next();
+// });
 
 module.exports = mongoose.model('Start', StartSchema);
 
