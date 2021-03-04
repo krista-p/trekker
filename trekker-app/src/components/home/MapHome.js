@@ -5,7 +5,8 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 // need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
 
-const MapHome = () => {
+const MapHome = ( {starts} ) => {
+  
   const mapContainerRef = useRef(null);
 
   // initialize map when component mounts
@@ -20,16 +21,8 @@ const MapHome = () => {
 
     let hoveredPointId = '';
 
-    // fetch starts from db
-    async function getStarts() {
-      const res = await fetch('http://localhost:5000/api');
-      const data = await res.json();
-      return data.data;
-    };
-
     // Show starting points on map
     async function showMap() {
-      let starts = await getStarts();
       map.on('load', () => {
         map.addSource('api', {
           type: 'geojson',
@@ -53,7 +46,6 @@ const MapHome = () => {
         map.addLayer({
           id: 'hover-point',
           type: 'circle',
-          //minzoom: 0,
           source: 'api',
           layout: {},
           paint: {

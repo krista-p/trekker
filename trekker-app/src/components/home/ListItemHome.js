@@ -1,5 +1,5 @@
 
-function ListItemHome() {
+const ListItemHome = () => {
   return (
     <div>
       <Navbar />
