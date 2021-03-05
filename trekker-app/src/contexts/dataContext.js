@@ -29,10 +29,11 @@ export const Provider = (props) => {
   };
 
   // now i need to handle the start change
-  const handleStartChange = ([lng, lat]) => {
-    //event.preventDefault();
-    setStart([lng, lat]);
-  }
+  // const handleStartChange = ([lng, lat]) => {
+  //   //event.preventDefault();
+  //   setStart([lng, lat]);
+  // }
+  // don't need to mess with context here
 
   return (
     <dataContext.Provider value={{
@@ -41,7 +42,6 @@ export const Provider = (props) => {
       start: start,
       setStart: setStart,
       handleSubmit: handleSubmit,
-      handleStartChange: handleStartChange
     }}>
       {props.children}
     </dataContext.Provider>

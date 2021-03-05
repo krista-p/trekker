@@ -1,22 +1,27 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DetailCreate from './DetailCreate';
-import { dataContext } from '../../contexts/dataContext';
+//import { dataContext } from '../../contexts/dataContext';
 
 // need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
 
-const MapCreate = () => {
+const MapCreate = React.memo(() => {
 
-  const value = useContext(dataContext);
+  const [coordinates, setCoordinates] = useState([]);
+  //const value = useContext(dataContext);
 
   const mapContainerRef = useRef(null);
   
+  const handleStartChange = ([lng, lat]) => {
+    //event.preventDefault();
+    setCoordinates([lng, lat]);
+  }
+  
   // initialize map when component mounts
   useEffect(() => {
-    let coordinates = [];
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mapbox/outdoors-v11',
@@ -41,23 +46,25 @@ const MapCreate = () => {
     const marker = new mapboxgl.Marker();
     
     const add_marker = (e) => {
-      coordinates = e.lngLat;
-      //console.log(start)
-      marker.setLngLat(coordinates).addTo(map);
-      value.handleStartChange([coordinates.lng, coordinates.lat]);
+      //coordinates = e.lngLat;
+      marker.setLngLat(e.lngLat).addTo(map);
+      handleStartChange([e.lngLat.lng, e.lngLat.lat]);
+      //value.handleStartChange([coordinates.lng, coordinates.lat]);
     }
     
     map.on('dblclick', add_marker);
     
     return () => map.remove();
-  });
+  }, []);
   //console.log(start)
+
+
   return (
     <div className="flex w-screen">
-      <div className="w-1/2 h-screen" ref={mapContainerRef} />
-      <DetailCreate className="w-1/2 h-screen" />
+      <div className="w-1/2 h-screen" ref={mapContainerRef}/>
+      <DetailCreate className="w-1/2 h-screen" coordinates={coordinates} />
     </div>
   );
-};
+});
 
 export default MapCreate;

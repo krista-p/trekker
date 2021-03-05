@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { dataContext } from "../../contexts/dataContext";
 
 
-const DetailCreate = () => {
+const DetailCreate = ({coordinates}) => {
 
   // need to create a post request with the new coordinates on the submit click button
   //console.log(start)
@@ -15,7 +15,7 @@ const DetailCreate = () => {
 
         <div className="p-4" id="geocoder">
           <label className="p-4">Starting Point (Double click to get location)</label>
-          <div className="border-2 border-green-500 bg-white">{JSON.stringify(value.start)}</div>
+          <div className="border-2 border-green-500 bg-white">{JSON.stringify(coordinates)}</div>
         </div>
 
         <div className="p-4">
