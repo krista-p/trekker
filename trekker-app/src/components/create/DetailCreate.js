@@ -1,18 +1,21 @@
+import { useContext } from "react";
+import { dataContext } from "../../contexts/dataContext";
 
 
-const DetailCreate = ({start, starts, handleSubmit}) => {
+const DetailCreate = () => {
 
   // need to create a post request with the new coordinates on the submit click button
   //console.log(start)
+  const value = useContext(dataContext);
 
   return (
     <div className=" flex-col w-1/2 p-4">
 
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={value.handleSubmit} >
 
         <div className="p-4" id="geocoder">
           <label className="p-4">Starting Point (Double click to get location)</label>
-          <div className="border-2 border-green-500 bg-white">{JSON.stringify(start)}</div>
+          <div className="border-2 border-green-500 bg-white">{JSON.stringify(value.start)}</div>
         </div>
 
         <div className="p-4">

@@ -2,14 +2,14 @@ import Navbar from './Navbar';
 import ListHome from './home/ListHome';
 import MapHome from './home/MapHome';
 
-const HomePage = ({starts, start}) => {
+const HomePage = () => {
 
   return (
-    <div>
+    <div className="h-screen w-screen">
       <Navbar />
       <div className="flex px-8 p-4">
-        <MapHome starts={starts} start={start} className="h-screen w-screen" />
-        <ListHome starts={starts} start={start} className="w-200" />
+        <MapHome className="h-full w-1/2" />
+        <ListHome />
       </div>
     </div>
   );

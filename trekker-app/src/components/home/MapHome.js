@@ -1,12 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { dataContext } from '../../contexts/dataContext';
 
 // need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
 
-const MapHome = ( {starts} ) => {
+const MapHome = () => {
   
+  const value = useContext(dataContext);
   const mapContainerRef = useRef();
 
   // initialize map when component mounts
@@ -28,14 +30,14 @@ const MapHome = ( {starts} ) => {
           type: 'geojson',
           data: {
             type: 'FeatureCollection',
-            features: starts.map((start, index) => (
+            features: value.trips.map((trip, index) => (
               {
                 type: 'Feature',
                 id: index + 1,
                 geometry: {
-                  id: start._id,
+                  id: trip._id,
                   type: 'Point',
-                  coordinates: [start.location.start[0], start.location.start[1]]
+                  coordinates: [trip.location.start[0], trip.location.start[1]]
                 }
               }
             )),
