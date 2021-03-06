@@ -1,16 +1,25 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { dataContext, Provider } from '../../contexts/dataContext';
+import { dataContext } from '../../contexts/dataContext';
 import ListHome from './ListHome';
 
-// need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapHome = () => {
+
+  // const [currentTrip, setCurrentTrip] = useState([]);
+  // console.log(currentTrip)
   
   const value = useContext(dataContext);
   const mapContainerRef = useRef();
+
+  // testing stuff with this function
+  const tester = (test) => {
+    console.log(test)
+    //const trip = value.trips.find((trip) => trip._id === test);
+    //setCurrentTrip(trip);
+  }
 
   // initialize map when component mounts
   useEffect(() => {
@@ -39,6 +48,9 @@ const MapHome = () => {
                   id: trip._id,
                   type: 'Point',
                   coordinates: [trip.startingPoint.start[0], trip.startingPoint.start[1]]
+                },
+                properties: {
+                  neededID: trip._id,
                 }
               }
             )),
@@ -102,8 +114,11 @@ const MapHome = () => {
             .addTo(map);
           });
 
-          map.on('click', 'hover-point', () => {
-            console.log('CLICKED')
+          map.on('click', 'hover-point', (e) => {
+            const blah = e.features;
+            tester(blah[0].properties.neededID)
+            //console.log(e.features)
+
           })
           // NEED TO FIGURE OUT HOW TO RENDER A DETAIL SECTION ON CLICK!!!
       });

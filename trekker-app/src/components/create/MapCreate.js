@@ -4,7 +4,6 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DetailCreate from './DetailCreate';
 
-// need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapCreate = React.memo(() => {

@@ -1,5 +1,4 @@
 import Navbar from './Navbar';
-import ListHome from './home/ListHome';
 import MapHome from './home/MapHome';
 
 const HomePage = () => {

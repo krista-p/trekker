@@ -19,7 +19,8 @@
   "homepage": "https://github.com/krista-p/trekker#readme",
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.21.0"
+    "eslint": "^7.21.0",
+    "eslint-plugin-react": "^7.22.0"
   },
   "config": {
     "commitizen": {
