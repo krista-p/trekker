@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { getStarts, addStart } = require('../controllers/starts');
+const { getTrips, addTrip } = require('../controllers/tripscontroller');
 
 
 router
     .route('/')
-    .get(getStarts)
-    .post(addStart);
+    .get(getTrips)
+    .post(addTrip);
 
 module.exports = router;

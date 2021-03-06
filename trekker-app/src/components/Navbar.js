@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import trekkerlogo from '../trekkerlogo.png'
+import trekkerlogo from '../idea2.png'
 
 const Navbar = () => {
   const history = useHistory();
@@ -13,7 +13,7 @@ const Navbar = () => {
         </a>
       </div>
       <div>
-        <button onClick={handleClick} className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded">Add a trip</button>
+        <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded">Add a trip</button>
       </div>
     </nav>
   );

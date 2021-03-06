@@ -3,7 +3,6 @@ import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DetailCreate from './DetailCreate';
-//import { dataContext } from '../../contexts/dataContext';
 
 // need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
@@ -11,12 +10,9 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwN
 const MapCreate = React.memo(() => {
 
   const [coordinates, setCoordinates] = useState([]);
-  //const value = useContext(dataContext);
-
   const mapContainerRef = useRef(null);
   
   const handleStartChange = ([lng, lat]) => {
-    //event.preventDefault();
     setCoordinates([lng, lat]);
   }
   
@@ -40,24 +36,34 @@ const MapCreate = React.memo(() => {
 
     map.doubleClickZoom.disable();
 
-    const draw = new MapboxDraw();
+    const draw = new MapboxDraw({
+      controls: {
+        point: true,
+        line_string: true,
+        polygon: false,
+        trash: true,
+        combine_features: false,
+        uncombine_features: false
+      }
+    });
+
     map.addControl(draw);
+
+    map.on('draw.create', function (e) {
+      console.log(e.features);
+    });
 
     const marker = new mapboxgl.Marker();
     
     const add_marker = (e) => {
-      //coordinates = e.lngLat;
       marker.setLngLat(e.lngLat).addTo(map);
       handleStartChange([e.lngLat.lng, e.lngLat.lat]);
-      //value.handleStartChange([coordinates.lng, coordinates.lat]);
     }
     
     map.on('dblclick', add_marker);
     
     return () => map.remove();
   }, []);
-  //console.log(start)
-
 
   return (
     <div className="flex w-screen">

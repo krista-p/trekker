@@ -2,8 +2,8 @@
 const mongoose = require('mongoose');
 //const geoCoder = require('../utils/geocoder');
 
-const StartSchema = new mongoose.Schema({
-  location: {
+const TripSchema = new mongoose.Schema({
+  startingPoint: {
     type: {
       type: String,
       enum: ['Point']
@@ -34,5 +34,5 @@ const StartSchema = new mongoose.Schema({
 //   next();
 // });
 
-module.exports = mongoose.model('Start', StartSchema);
+module.exports = mongoose.model('Trip', TripSchema);
 

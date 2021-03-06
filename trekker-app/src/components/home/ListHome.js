@@ -6,10 +6,14 @@ const ListHome = ( ) => {
 
   const value = useContext(dataContext);
 
+  const clicker = () => {
+    console.log('click!')
+  }
+
   return (
     <div className="pl-4">
       <ul>
-        <li>
+        <li onClick={clicker}>
           {value.trips.map((trip) => {
             return (<ListItemHome trip={trip} key={trip._id} />)
           })

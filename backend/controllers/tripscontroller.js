@@ -1,13 +1,13 @@
 
-const Start = require('../models/Start');
+const Trip = require('../models/Trip');
 
-exports.addStart = async (req, res) => {
+exports.addTrip = async (req, res) => {
     try {
-        const start = await Start.create(req.body);
+        const trip = await Trip.create(req.body);
 
         return res.status(200).json({
             success: true,
-            data: start
+            data: trip
         });
     } catch (err) {
         console.log(err);
@@ -15,14 +15,14 @@ exports.addStart = async (req, res) => {
     }
 };
 
-exports.getStarts = async (_, res) => {
+exports.getTrips = async (_, res) => {
   try {
-      const starts = await Start.find();
+      const trips = await Trip.find();
 
       return res.status(200).json({
           succes: true,
-          count: starts.length,
-          data: starts
+          count: trips.length,
+          data: trips
       })
   } catch (err) {
       console.log(err);

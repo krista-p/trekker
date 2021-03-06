@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { dataContext } from '../../contexts/dataContext';
+import { dataContext, Provider } from '../../contexts/dataContext';
 
 // need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
@@ -24,7 +24,7 @@ const MapHome = () => {
     let hoveredPointId = '';
 
     // Show starting points on map
-    async function showMap() {
+    const showMap = () => {
       map.on('load', () => {
         map.addSource('api', {
           type: 'geojson',
@@ -37,7 +37,7 @@ const MapHome = () => {
                 geometry: {
                   id: trip._id,
                   type: 'Point',
-                  coordinates: [trip.location.start[0], trip.location.start[1]]
+                  coordinates: [trip.startingPoint.start[0], trip.startingPoint.start[1]]
                 }
               }
             )),
@@ -51,10 +51,14 @@ const MapHome = () => {
           source: 'api',
           layout: {},
           paint: {
-            'circle-radius': 8,
+            'circle-radius': [
+              'case', ['boolean', ['feature-state', 'hover'], false],
+              10,
+              5
+            ],
             'circle-color': [
               'case', ['boolean', ['feature-state', 'hover'], false],
-              'red',
+              'magenta',
               'blue'
             ],
             'circle-opacity': 0.6,
@@ -69,6 +73,7 @@ const MapHome = () => {
           if (hoveredPointId) {
             map.setFeatureState({ source: 'api', id: hoveredPointId }, { hover: false });
           }
+          //console.log(e.features)
           hoveredPointId = e.features[0].id;
           map.setFeatureState({ source: 'api', id: hoveredPointId }, { hover: true });
           }
