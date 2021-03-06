@@ -26,5 +26,4 @@ mongoose.connect(process.env.MDB_CONNECT, {useNewUrlParser:true, useUnifiedTopol
 });
 
 // set up routes
-//app.use('/auth', require('./routes/userRouter'));
 app.use('/api', require('./routes/router'));

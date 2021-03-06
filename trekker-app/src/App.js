@@ -1,7 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import CreatePage from './components/CreatePage';
-import RouteDetail from './components/RouteDetail';
+import DetailPage from './components/DetailPage';
 import NotFoundPage from './components/NotFoundPage';
 import { useContext, useEffect } from 'react';
 import { dataContext } from './contexts/dataContext';
@@ -25,7 +25,7 @@ const App = () => {
       <Switch>
         <Route path="/" exact component={() => <HomePage />} />
         <Route path="/create" component={() => <CreatePage />} />
-        <Route path="/route/:id" component={RouteDetail} />
+        <Route path="/route/:id" component={DetailPage} />
         <Route component={NotFoundPage} />
       </Switch>
     </main>

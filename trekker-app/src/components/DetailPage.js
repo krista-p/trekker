@@ -1,17 +1,15 @@
 import Navbar from './Navbar';
-import ListHome from './home/ListHome';
-import MapHome from './home/MapHome';
+import MapDetail from './details/MapDetail';
 
-const HomePage = () => {
-
+function DetailPage() {
   return (
     <div className="h-screen w-screen">
       <Navbar />
       <div className="flex h-5/6 w-screen">
-        <MapHome className="h-full w-3/4" />
+        <MapDetail className="h-full w-full" />
       </div>
     </div>
   );
 }
 
-export default HomePage;
+export default DetailPage;

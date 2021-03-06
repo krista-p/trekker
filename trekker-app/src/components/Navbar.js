@@ -1,20 +1,16 @@
 import { useHistory } from 'react-router-dom';
-import trekkerlogo from '../idea2.png'
+import trekkerlogo from '../trekkerLogo.png'
 
 const Navbar = () => {
   const history = useHistory();
   const handleClick = () => history.push('/create');
 
   return (
-    <nav className="font-sans flex flex-col text-center sm:flex-row sm:text-left sm:justify-between py-4 px-6 bg-white shadow sm:items-baseline w-full">
-      <div>
+    <nav className="font-sans flex flex-col justify-between sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-white shadow-lg sm:items-baseline w-full">
         <a href="/">
-          <img src={trekkerlogo} alt="trekker logo" className="w-50 h-50"/>
+          <img src={trekkerlogo} alt="trekker logo" className="m-auto" />
         </a>
-      </div>
-      <div>
-        <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded">Add a trip</button>
-      </div>
+        <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded m-auto mr-0">Add a trip</button>
     </nav>
   );
 }

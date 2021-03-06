@@ -6,14 +6,11 @@ const ListHome = ( ) => {
 
   const value = useContext(dataContext);
 
-  const clicker = () => {
-    console.log('click!')
-  }
-
   return (
-    <div className="pl-4">
+    <div className="overflow-auto text-center">
+      <h1>Click on a trip for more details!!</h1>
       <ul>
-        <li onClick={clicker}>
+        <li>
           {value.trips.map((trip) => {
             return (<ListItemHome trip={trip} key={trip._id} />)
           })

@@ -2,9 +2,10 @@ import React, { useRef, useEffect, useContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { dataContext, Provider } from '../../contexts/dataContext';
+import ListHome from './ListHome';
 
 // need to hide the access token in a config file that will be in the git ignore file
-mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
+mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapHome = () => {
   
@@ -86,6 +87,25 @@ const MapHome = () => {
           }
           hoveredPointId = null;
           });
+
+          // NEED TO FIGURE OUT HOW TO RENDER A DETAIL SECTION ON CLICK!!!!
+          map.on('click', 'hover-point', function (e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+             
+            new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML('<p>hello there</p>')
+            .addTo(map);
+          });
+
+          map.on('click', 'hover-point', () => {
+            console.log('CLICKED')
+          })
+          // NEED TO FIGURE OUT HOW TO RENDER A DETAIL SECTION ON CLICK!!!
       });
     };
 
@@ -105,7 +125,10 @@ const MapHome = () => {
   });
 
   return (
-  <div className="w-screen h-screen" ref={mapContainerRef} />
+      <div className="flex w-full">
+        <div className="w-3/4 h-full" ref={mapContainerRef}/>
+        <ListHome className="w-1/4 h-full" />
+      </div>
   );
 };
 

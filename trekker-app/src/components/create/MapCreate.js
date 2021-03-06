@@ -5,7 +5,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DetailCreate from './DetailCreate';
 
 // need to hide the access token in a config file that will be in the git ignore file
-mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2x0bjBpeGEwNHBwMm5vM3FocGpwaThvIn0.xuVes-DFVzmA9nbpb85Nkw';
+mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapCreate = React.memo(() => {
 
@@ -25,17 +25,14 @@ const MapCreate = React.memo(() => {
       zoom: 4,
     });
 
-    // add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-
+    
     // add search feature, when queried, map goes to the new location
     map.addControl(new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     }));
-
-    map.doubleClickZoom.disable();
-
+    
+    
     const draw = new MapboxDraw({
       controls: {
         point: true,
@@ -46,7 +43,10 @@ const MapCreate = React.memo(() => {
         uncombine_features: false
       }
     });
-
+    
+    // map settings 
+    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    map.doubleClickZoom.disable();
     map.addControl(draw);
 
     map.on('draw.create', function (e) {
@@ -66,9 +66,9 @@ const MapCreate = React.memo(() => {
   }, []);
 
   return (
-    <div className="flex w-screen">
-      <div className="w-1/2 h-screen" ref={mapContainerRef}/>
-      <DetailCreate className="w-1/2 h-screen" coordinates={coordinates} />
+    <div className="flex w-full">
+      <div className="w-3/4 h-full" ref={mapContainerRef}/>
+      <DetailCreate className="w-1/4 h-full" coordinates={coordinates} />
     </div>
   );
 });

@@ -4,11 +4,10 @@ import MapCreate from './create/MapCreate';
 const CreatePage = () => {
 
   return (
-    <div> 
+    <div className="h-screen w-screen"> 
       <Navbar />
-      <h1>THIS IS THE CREATE PAGE</h1>
-      <div className="flex px-8 p-4">
-        <MapCreate className="w-screen h-screen" />
+      <div className="flex h-5/6 w-screen">
+        <MapCreate className="h-full w-full" />
       </div>
     </div>
   );
