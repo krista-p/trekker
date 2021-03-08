@@ -8,21 +8,25 @@ mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapHome = () => {
 
-  // const [currentTrip, setCurrentTrip] = useState([]);
-  // console.log(currentTrip)
+  // state needed to get db id of clicked point
+  const [currentTrip, setCurrentTrip] = useState([]);
   
+  // context data from db
   const value = useContext(dataContext);
-  const mapContainerRef = useRef();
 
-  // testing stuff with this function
-  const tester = (test) => {
-    console.log(test)
-    //const trip = value.trips.find((trip) => trip._id === test);
-    //setCurrentTrip(trip);
-  }
+  // needed to mount the map to a container
+  const mapContainerRef = useRef();
 
   // initialize map when component mounts
   useEffect(() => {
+    
+    // testing stuff with this function
+    const tester = (test) => {
+      const trip = value.trips.find((trip) => trip._id === test);
+      setCurrentTrip(trip);
+    }
+
+    // new map instance
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       // Outdoors style
@@ -31,9 +35,10 @@ const MapHome = () => {
       zoom: 4,
     });
 
-    let hoveredPointId = '';
+    // needed for the clicked layer
+    let clickedPointId = '';
 
-    // Show starting points on map
+    // Show starting points on map, fetch from db
     const showMap = () => {
       map.on('load', () => {
         map.addSource('api', {
@@ -50,27 +55,27 @@ const MapHome = () => {
                   coordinates: [trip.startingPoint.start[0], trip.startingPoint.start[1]]
                 },
                 properties: {
-                  neededID: trip._id,
+                  currentId: trip._id,
                 }
               }
             )),
           }
         });
         
-        // create a layer for the points
+        // create a layer for the clicked points
         map.addLayer({
-          id: 'hover-point',
+          id: 'clicked-point',
           type: 'circle',
           source: 'api',
           layout: {},
           paint: {
             'circle-radius': [
-              'case', ['boolean', ['feature-state', 'hover'], false],
+              'case', ['boolean', ['feature-state', 'clicked'], false],
               10,
               5
             ],
             'circle-color': [
-              'case', ['boolean', ['feature-state', 'hover'], false],
+              'case', ['boolean', ['feature-state', 'clicked'], false],
               'magenta',
               'blue'
             ],
@@ -79,49 +84,34 @@ const MapHome = () => {
             'circle-stroke-width': 1
           }
         });
-      
-        // create a mouse event for hovering over points
-        map.on('mousemove', 'hover-point', function (e) {
+
+        // change cursor to pointer on map
+        map.on('mouseenter', 'clicked-point', () => {
+          map.getCanvas().style.cursor = 'pointer'
+        });
+
+        map.on('mouseleave', 'clicked-point', () => {
+          map.getCanvas().style.cursor = ''
+        });
+
+        // when point is clicked, change to clicked-layer, and show details on side
+        map.on('click', 'clicked-point', (e) => {
           if (e.features.length > 0) {
-          if (hoveredPointId) {
-            map.setFeatureState({ source: 'api', id: hoveredPointId }, { hover: false });
-          }
-          //console.log(e.features)
-          hoveredPointId = e.features[0].id;
-          map.setFeatureState({ source: 'api', id: hoveredPointId }, { hover: true });
+            if (clickedPointId) {
+              map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: false } );
+            }
+            
+            clickedPointId = e.features[0].id;
+            map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: true } );
+            
+            const currentTripId = e.features[0].properties.currentId;
+            tester(currentTripId);
           }
         });
 
-        // clear the hover event when off of point
-        map.on('mouseleave', 'hover-point', function () {
-          if (hoveredPointId) {
-            map.setFeatureState({ source: 'api', id: hoveredPointId }, { hover: false });
-          }
-          hoveredPointId = null;
-          });
 
-          // NEED TO FIGURE OUT HOW TO RENDER A DETAIL SECTION ON CLICK!!!!
-          map.on('click', 'hover-point', function (e) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-             
-            new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML('<p>hello there</p>')
-            .addTo(map);
-          });
-
-          map.on('click', 'hover-point', (e) => {
-            const blah = e.features;
-            tester(blah[0].properties.neededID)
-            //console.log(e.features)
-
-          })
-          // NEED TO FIGURE OUT HOW TO RENDER A DETAIL SECTION ON CLICK!!!
       });
+
     };
 
     // add navigation control (the +/- zoom buttons)
@@ -132,17 +122,18 @@ const MapHome = () => {
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     }));
+    
 
-    // invoke the map function
+    // show the entire map
     showMap();
 
     return () => map.remove();
-  });
+  }, [value.trips]);
 
   return (
       <div className="flex w-full">
         <div className="w-3/4 h-full" ref={mapContainerRef}/>
-        <ListHome className="w-1/4 h-full" />
+        <ListHome className="w-1/4 h-full" currentTrip={currentTrip} />
       </div>
   );
 };

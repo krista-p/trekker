@@ -20,7 +20,7 @@ app.listen(PORT, () => {
 });
 
 // connect to mongoDB 
-mongoose.connect(process.env.MDB_CONNECT, {useNewUrlParser:true, useUnifiedTopology: true}, (err) => {
+mongoose.connect(process.env.MDB_CONNECT, {useNewUrlParser:true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false}, (err) => {
   if (err) console.error(err);
   console.log('Connected to MongoDB!!');
 });

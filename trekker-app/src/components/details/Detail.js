@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { dataContext } from "../../contexts/dataContext";
 
 
-const Detail = ({}) => {
+const Detail = () => {
 
   const value = useContext(dataContext);
 
@@ -16,6 +16,7 @@ const Detail = ({}) => {
 
       <div className="p-2">
         <label className="font-extrabold text-primary">Campsites</label>
+        <h1>TEST: {value.current._id}</h1>
       </div>
 
       <div className="p-2">

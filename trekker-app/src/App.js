@@ -19,6 +19,7 @@ const App = () => {
         value.setTrips(db.data);
       });
   }, []);
+  // add commented code to ignore ****
 
   return (
     <main>
