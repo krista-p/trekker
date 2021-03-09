@@ -9,20 +9,20 @@ const Navbar = () => {
 
   if (history.location.pathname === '/') {
     return (
-      <nav className="font-sans flex flex-col justify-between sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-white shadow-lg sm:items-baseline w-full">
+      <nav className="font-sans flex flex-col justify-between w-full py-2 px-6 bg-white shadow-md md:flex-row md:items-center">
           <a href="/">
             <img src={trekkerlogo} alt="trekker logo" className="m-auto" />
           </a>
-          <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded m-auto mr-0 shadow-md">Add a trip</button>
+          <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded shadow-md">Add a trip</button>
       </nav>
     );
   }
   return (
-    <nav className="font-sans flex flex-col justify-between sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-white shadow-lg sm:items-baseline w-full">
+    <nav className="font-sans flex flex-col justify-between w-full py-2 px-6 bg-white shadow-md md:flex-row md:items-center">
         <a href="/">
           <img src={trekkerlogo} alt="trekker logo" className="m-auto" />
         </a>
-        <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded m-auto mr-0 shadow-md">Back</button>
+        <button onClick={handleClick} className="bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded shadow-md">Back</button>
     </nav>
   );
 }

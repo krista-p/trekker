@@ -15,6 +15,9 @@ app.use(express.json());
 // Enable CORS
 app.use(cors());
 
+// set up routes
+app.use('/api', require('./routes/router'));
+
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
 });
@@ -24,6 +27,3 @@ mongoose.connect(process.env.MDB_CONNECT, {useNewUrlParser:true, useUnifiedTopol
   if (err) console.error(err);
   console.log('Connected to MongoDB!!');
 });
-
-// set up routes
-app.use('/api', require('./routes/router'));

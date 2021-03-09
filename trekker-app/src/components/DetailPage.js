@@ -3,10 +3,10 @@ import MapDetail from './details/MapDetail';
 
 function DetailPage() {
   return (
-    <div className="h-screen w-screen">
+    <div className="flex flex-col h-screen w-screen overflow-hidden">
       <Navbar />
-      <div className="flex h-5/6 w-screen">
-        <MapDetail className="h-full w-full" />
+      <div className="flex w-screen overflow-y-auto md:overflow-hidden md:flex-1">
+        <MapDetail className="flex w-full" />
       </div>
     </div>
   );

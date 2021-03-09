@@ -4,10 +4,10 @@ import MapHome from './home/MapHome';
 const HomePage = () => {
 
   return (
-    <div className="h-screen w-screen">
+    <div className="flex flex-col h-screen w-screen md:overflow-hidden">
       <Navbar />
-      <div className="flex h-5/6 w-screen">
-        <MapHome className="h-full w-3/4" />
+      <div className="flex h-full w-screen md:overflow-hidden md:flex-1">
+        <MapHome className="flex w-full" />
       </div>
     </div>
   );

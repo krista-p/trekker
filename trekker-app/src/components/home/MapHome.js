@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useContext, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { dataContext } from '../../contexts/dataContext';
-import ListHome from './ListHome';
+import DetailContainerHome from './DetailContainerHome';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
@@ -20,11 +20,11 @@ const MapHome = () => {
   // initialize map when component mounts
   useEffect(() => {
     
-    // testing stuff with this function
-    const tester = (test) => {
-      const trip = value.trips.find((trip) => trip._id === test);
+    // function to get the current trip that the user clicks on
+    const currentTripHandler = (current) => {
+      const trip = value.trips.find((trip) => trip._id === current);
       setCurrentTrip(trip);
-    }
+    };
 
     // new map instance
     const map = new mapboxgl.Map({
@@ -105,10 +105,9 @@ const MapHome = () => {
             map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: true } );
             
             const currentTripId = e.features[0].properties.currentId;
-            tester(currentTripId);
+            currentTripHandler(currentTripId);
           }
         });
-
 
       });
 
@@ -131,9 +130,9 @@ const MapHome = () => {
   }, [value.trips]);
 
   return (
-      <div className="flex w-full">
-        <div className="w-3/4 h-full" ref={mapContainerRef}/>
-        <ListHome className="w-1/4 h-full" currentTrip={currentTrip} />
+      <div className="flex flex-col w-full md:flex-row">
+        <div className="w-full h-3/4 md:w-2/3 md:h-full" ref={mapContainerRef}/>
+        <DetailContainerHome className="w-full h-1/4 md:overflow-y-hidden md:w-1/3 md:h-full" currentTrip={currentTrip} />
       </div>
   );
 };

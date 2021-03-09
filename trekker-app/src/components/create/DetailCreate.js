@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import { dataContext } from "../../contexts/dataContext";
 
 
-const DetailCreate = ( { coordinates, route } ) => {
+const DetailCreate = ( { coordinates, route, camps } ) => {
 
   const [days, setDays] = useState('');
   const [fees, setFees] = useState('');
@@ -14,17 +14,22 @@ const DetailCreate = ( { coordinates, route } ) => {
   const value = useContext(dataContext);
   const history = useHistory();
   
+  // on submit button, add data to db, need to add error handling
   const handleSubmit = async (event) => {
+
     event.preventDefault();
+
     const data = { 
       startingPoint: { start: coordinates },
       tripRoute: { points: route },
-      //campsites: { spots: camps },
+      campsites: { spots: camps },
       days: days,
       fees: fees,
       trailType: type,
-      trailDate: date
+      trailDate: date,
+      description: description
     };
+
     if (coordinates) {
       const post = {
         method: 'POST',
@@ -35,13 +40,15 @@ const DetailCreate = ( { coordinates, route } ) => {
       };
       await fetch('http://localhost:5000/api', post)
         .then((data) => data.json())
-        .then((newStart) => {
-          value.setTrips(value.trips.concat(newStart));
+        .then((newTrip) => {
+          value.setTrips(value.trips.concat(newTrip));
         });
-        history.push('/');
+      history.push('/');
+      history.go();
     }
   };
 
+  // handling the input changes
   const handleDaysChange = (event) => {
     setDays(event.target.value);
   };
@@ -59,8 +66,9 @@ const DetailCreate = ( { coordinates, route } ) => {
   };
 
   return (
-    <div className=" flex-col w-1/2 p-4 py-0 overflow-auto text-center">
+    <div className="flex flex-col overflow-y-auto p-4 py-0 m-2 text-center md:flex-1">
 
+      <h1 className="text-primary font-extrabold text-xl w-full">Create a trip!</h1>
       <form onSubmit={handleSubmit} >
 
         <div className="p-2" id="geocoder">
@@ -109,7 +117,7 @@ const DetailCreate = ( { coordinates, route } ) => {
           <textarea type="text" value={description} onChange={handleDescriptionChange} className="border-2 border-primary w-full resize-none" rows='5'></textarea>
         </div>
         
-        <button type="submit" className="w-full bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded sticky bottom-0 shadow-md">Submit</button>
+        <button type="submit" className="w-full bg-primary hover:bg-primaryDark text-white font-bold py-2 px-4 rounded md:sticky md:bottom-0 shadow-md">Submit</button>
 
       </form>
       

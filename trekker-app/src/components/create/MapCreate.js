@@ -12,15 +12,9 @@ const MapCreate = () => {
   const [route, setRoute] = useState([]);
   const [camps, setCamps] = useState([]);
   const mapContainerRef = useRef(null);
-  console.log(camps)
-
+  
   const handleRouteChange = (data) => {
     setRoute(data);
-  };
-
-  const handleCampsChange = (data) => {
-    const addedCamp = [...camps, data];
-    setCamps(addedCamp);
   };
   
   const handleStartChange = ([lng, lat]) => {
@@ -29,6 +23,13 @@ const MapCreate = () => {
   
   // initialize map when component mounts
   useEffect(() => {
+    
+    const handleCampsChange = (data) => {
+      let blah = camps.concat(data);
+      setCamps(blah);
+      console.log(blah)
+    };
+
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mapbox/outdoors-v11',
@@ -36,14 +37,13 @@ const MapCreate = () => {
       zoom: 4,
     });
 
-    
     // add search feature, when queried, map goes to the new location
     map.addControl(new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     }));
     
-    
+    // create new mapbox draw session with specific controls
     const draw = new MapboxDraw({
       controls: {
         point: true,
@@ -55,38 +55,47 @@ const MapCreate = () => {
       }
     });
     
-    // map settings 
-    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    // map settings
+    map.addControl(new mapboxgl.NavigationControl(), 'bottom-left');
     map.doubleClickZoom.disable();
     map.addControl(draw);
 
+    // on a new draw event
     map.on('draw.create', (e) => {
+      // if the draw is a string, change route state
       if (e.features[0].geometry.type === 'LineString') handleRouteChange(e.features[0].geometry.coordinates);
-      if (e.features[0].geometry.type === 'Point') handleCampsChange(e.features[0].geometry.coordinates);
+      // if the draw is a point, change camp state
+      if (e.features[0].geometry.type === 'Point') { 
+        const campsites = [e.features[0].geometry.coordinates];
+        handleCampsChange(campsites);
+      };
     });
 
-    // NEED TO create an event on draw.delete that would delete the line from the database
+    // ****** NEED TO create an event on draw.delete that would delete the line from the database
     map.on('draw.delete', (e) => {
       console.log(e)
       //handleRouteChange(e.features[0].geometry.coordinates);
     });
 
+    // new marker, used for starting location
     const marker = new mapboxgl.Marker();
     
+    // set marker lat & lng to click location
     const add_marker = (e) => {
       marker.setLngLat(e.lngLat).addTo(map);
       handleStartChange([e.lngLat.lng, e.lngLat.lat]);
-    }
+    };
     
+    // show marker on double click
     map.on('dblclick', add_marker);
     
     return () => map.remove();
-  }, []);
+  }, [camps]);
 
   return (
-    <div className="flex w-full">
-      <div className="w-3/4 h-full" ref={mapContainerRef}/>
-      <DetailCreate className="w-1/4 h-full " coordinates={coordinates} route={route} />
+    <div className="flex flex-col w-full md:flex-row">
+      <div className="w-full h-screen md:w-2/3 md:h-full" ref={mapContainerRef}/>
+      <DetailCreate className="w-full h-1/4 overflow-y-hidden md:w-1/3 md:h-full" coordinates={coordinates} route={route} camps={camps} />
     </div>
   );
 };

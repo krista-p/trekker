@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useContext} from 'react';
+import React, { useRef, useEffect, useContext, useState} from 'react';
 import { dataContext } from "../../contexts/dataContext";
 import mapboxgl from 'mapbox-gl';
+//import maki from '@mapbox/maki';
 import Detail from './Detail';
 
-// need to hide the access token in a config file that will be in the git ignore file
 mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapDetail = () => {
@@ -23,6 +23,7 @@ const MapDetail = () => {
     
     map.on('load', () => {
 
+      // add the source of the starting point
       map.addSource('startingPoint', {
         type: 'geojson',
         data: {
@@ -41,6 +42,7 @@ const MapDetail = () => {
         }
       });
       
+      // add the source of the route locations
       map.addSource('route', {
         type: 'geojson',
         data: {
@@ -58,7 +60,8 @@ const MapDetail = () => {
           ],
         }
       });
-      
+
+      // create layer for the line
       map.addLayer({
         id: 'line',
         type: 'line',
@@ -73,6 +76,7 @@ const MapDetail = () => {
         }
       });
       
+      // create layer for the starting point
       map.addLayer({
         id: 'point',
         type: 'circle',
@@ -87,11 +91,24 @@ const MapDetail = () => {
         }
       });
 
+      // trying to figure out how to use Maki icons .... weird ...
+      // map.addLayer({
+      //   id: 'point',
+      //   type: 'symbol',
+      //   //sprite: "mapbox://sprites/mapbox/bright-v8",
+      //   source: 'startingPoint',
+      //   layout: {
+      //     'icon-image': 'marker-15'
+      //   },
+      //   paint: {}
+      // });
+      
     });
 
     // map settings 
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
+    // zoom in on the route bounds
     const coordinates = value.current.tripRoute.points;
     const bounds = coordinates.reduce( (bounds, coord) => {
       return bounds.extend(coord);
@@ -102,9 +119,9 @@ const MapDetail = () => {
   }, []);
 
   return (
-    <div className="flex w-full">
-      <div className="w-3/4 h-full" ref={mapContainerRef}/>
-      <Detail className="w-1/4 h-full" />
+    <div className="flex flex-col w-full md:flex-row">
+      <div className="w-full h-screen md:w-2/3 md:h-full" ref={mapContainerRef}/>
+      <Detail className="w-full h-1/4 overflow-y-hidden md:w-1/3 md:h-full" />
     </div>
   );
 };
