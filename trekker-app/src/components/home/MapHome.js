@@ -4,13 +4,14 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { dataContext } from '../../contexts/dataContext';
 import DetailContainerHome from './DetailContainerHome';
 
+// this token is scoped only for read, so it is okay for clients to see it
 mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapHome = () => {
 
   // state needed to get db id of clicked point
   const [currentTrip, setCurrentTrip] = useState([]);
-  
+
   // context data from db
   const value = useContext(dataContext);
 
@@ -29,7 +30,6 @@ const MapHome = () => {
     // new map instance
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      // Outdoors style
       style: 'mapbox://styles/mapbox/outdoors-v11',
       center: [-100, 40],
       zoom: 4,
@@ -37,81 +37,81 @@ const MapHome = () => {
 
     // needed for the clicked layer
     let clickedPointId = '';
-
+    
+    
     // Show starting points on map, fetch from db
-    const showMap = () => {
-      map.on('load', () => {
-        map.addSource('api', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: value.trips.map((trip, index) => (
-              {
-                type: 'Feature',
-                id: index + 1,
-                geometry: {
-                  id: trip._id,
-                  type: 'Point',
-                  coordinates: [trip.startingPoint.start[0], trip.startingPoint.start[1]]
-                },
-                properties: {
-                  currentId: trip._id,
-                }
+    map.on('load', () => {
+          
+      map.addSource('api', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: value.trips.map((trip, index) => (
+            {
+              type: 'Feature',
+              id: index + 1,
+              geometry: {
+                id: trip._id,
+                type: 'Point',
+                coordinates: [trip.startingPoint.start[0], trip.startingPoint.start[1]]
+              },
+              properties: {
+                currentId: trip._id,
+                days: trip.days
               }
-            )),
-          }
-        });
-        
-        // create a layer for the clicked points
-        map.addLayer({
-          id: 'clicked-point',
-          type: 'circle',
-          source: 'api',
-          layout: {},
-          paint: {
-            'circle-radius': [
-              'case', ['boolean', ['feature-state', 'clicked'], false],
-              10,
-              5
-            ],
-            'circle-color': [
-              'case', ['boolean', ['feature-state', 'clicked'], false],
-              'magenta',
-              'blue'
-            ],
-            'circle-opacity': 0.6,
-            'circle-stroke-color': 'cyan',
-            'circle-stroke-width': 1
-          }
-        });
-
-        // change cursor to pointer on map
-        map.on('mouseenter', 'clicked-point', () => {
-          map.getCanvas().style.cursor = 'pointer'
-        });
-
-        map.on('mouseleave', 'clicked-point', () => {
-          map.getCanvas().style.cursor = ''
-        });
-
-        // when point is clicked, change to clicked-layer, and show details on side
-        map.on('click', 'clicked-point', (e) => {
-          if (e.features.length > 0) {
-            if (clickedPointId) {
-              map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: false } );
             }
-            
-            clickedPointId = e.features[0].id;
-            map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: true } );
-            
-            const currentTripId = e.features[0].properties.currentId;
-            currentTripHandler(currentTripId);
+            ))
           }
         });
 
+      // create a layer for the clicked points
+      map.addLayer({
+        id: 'clicked-point',
+        type: 'circle',
+        source: 'api',
+        layout: {},
+        paint: {
+          'circle-radius': [
+            'case', ['boolean', ['feature-state', 'clicked'], false],
+            10,
+            5
+          ],
+          'circle-color': [
+            'case', ['boolean', ['feature-state', 'clicked'], false],
+            'magenta',
+            'blue'
+          ],
+          'circle-opacity': 0.6,
+          'circle-stroke-color': 'cyan',
+          'circle-stroke-width': 1
+        },
       });
 
-    };
+      // change cursor to pointer on map
+      map.on('mouseenter', 'clicked-point', (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.on('mouseleave', 'clicked-point', (e) => {
+        map.getCanvas().style.cursor = '';
+      });
+
+      // when point is clicked, change to clicked-layer, and show details on side
+      map.on('click', 'clicked-point', (e) => {
+        if (e.features.length > 0) {
+          if (clickedPointId) {
+            map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: false } );
+          }
+          
+          clickedPointId = e.features[0].id;
+          map.setFeatureState( { source: 'api', id: clickedPointId }, { clicked: true } );
+          
+          const currentTripId = e.features[0].properties.currentId;
+          currentTripHandler(currentTripId);
+        }
+      });
+
+    });
 
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -121,10 +121,6 @@ const MapHome = () => {
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     }));
-    
-
-    // show the entire map
-    showMap();
 
     return () => map.remove();
   }, [value.trips]);

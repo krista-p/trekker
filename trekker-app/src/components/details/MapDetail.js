@@ -1,10 +1,10 @@
-import React, { useRef, useEffect, useContext, useState} from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { dataContext } from "../../contexts/dataContext";
 import mapboxgl from 'mapbox-gl';
-//import maki from '@mapbox/maki';
 import Detail from './Detail';
 
-mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
+// this token is scoped only for read, so it is okay for clients to see it
+mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jpc3RhcG9saWthaXRpcyIsImEiOiJja2w5a29wdHgyMmtoMnZwZWhxM3B4Z3ZoIn0.zZQDeayZw6F5zcnkXi3pMw';
 
 const MapDetail = () => {
 
@@ -14,9 +14,10 @@ const MapDetail = () => {
   
   // initialize map when component mounts
   useEffect(() => {
+
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/outdoors-v11',
+      style: 'mapbox://styles/kristapolikaitis/ckl9ksjpg0l6h17n27r0wkhhz',
       center: value.current.startingPoint.start,
       zoom: 5,
     });
@@ -42,6 +43,18 @@ const MapDetail = () => {
         }
       });
       
+      // create layer for the starting point
+      map.addLayer({
+        id: 'point',
+        type: 'symbol',
+        source: 'startingPoint',
+        layout: {
+          "icon-image": "start",
+          "icon-anchor": 'bottom',
+          'icon-allow-overlap': true
+        },
+      });
+
       // add the source of the route locations
       map.addSource('route', {
         type: 'geojson',
@@ -73,36 +86,85 @@ const MapDetail = () => {
         paint: {
           'line-color': 'magenta',
           'line-width': 2,
-        }
-      });
-      
-      // create layer for the starting point
-      map.addLayer({
-        id: 'point',
-        type: 'circle',
-        source: 'startingPoint',
-        layout: {},
-        paint: {
-          'circle-radius': 5,
-          'circle-color': 'blue',
-          'circle-opacity': 0.9,
-          'circle-stroke-color': 'cyan',
-          'circle-stroke-width': 1
+          'line-opacity': .5
         }
       });
 
-      // trying to figure out how to use Maki icons .... weird ...
-      // map.addLayer({
-      //   id: 'point',
-      //   type: 'symbol',
-      //   //sprite: "mapbox://sprites/mapbox/bright-v8",
-      //   source: 'startingPoint',
-      //   layout: {
-      //     'icon-image': 'marker-15'
-      //   },
-      //   paint: {}
-      // });
+      // create layer for the arrows on the route
+      map.addLayer({
+        id: 'arrow',
+        type: 'symbol',
+        source: 'route',
+        layout: {
+          "icon-image": 'arrow',
+          "symbol-placement": 'line',
+          'icon-rotate': 180
+        },
+        paint: {}
+      });
       
+      // create source for the campsites
+      map.addSource('campPoints', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              id: 3,
+              geometry: {
+                id: value.current._id,
+                type: 'MultiPoint',
+                coordinates: value.current.campsites.spots
+              }
+            }
+          ],
+        }
+      });
+
+      // create a layer for the camp spots
+      map.addLayer({
+        id: 'camp-point',
+        type: 'symbol',
+        source: 'campPoints',
+        layout: {
+          'icon-image': 'tent',
+          'icon-allow-overlap': true
+        },
+        paint: {}
+      });
+
+      // add the source of the ending point
+      map.addSource('endingPoint', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              id: 4,
+              geometry: {
+                id: value.current._id,
+                type: 'Point',
+                coordinates: [value.current.tripRoute.points[value.current.tripRoute.points.length -1][0], 
+                value.current.tripRoute.points[value.current.tripRoute.points.length -1][1]]
+              }
+            }
+          ],
+        }
+      });
+      
+      // create layer for the ending point
+      map.addLayer({
+        id: 'end-point',
+        type: 'symbol',
+        source: 'endingPoint',
+        layout: {
+          "icon-image": "end",
+          "icon-anchor": 'bottom',
+          'icon-allow-overlap': true
+        },
+      });
     });
 
     // map settings 
@@ -113,10 +175,10 @@ const MapDetail = () => {
     const bounds = coordinates.reduce( (bounds, coord) => {
       return bounds.extend(coord);
       }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-    map.fitBounds(bounds, { padding: 20 });
+    map.fitBounds(bounds, { padding: 30 });
     
     return () => map.remove();
-  }, []);
+  }, [value]);
 
   return (
     <div className="flex flex-col w-full md:flex-row">

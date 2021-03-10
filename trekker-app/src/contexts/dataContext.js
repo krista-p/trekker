@@ -14,7 +14,6 @@ export const Provider = (props) => {
     useEffect(() => {
       localStorage.setItem(key, JSON.stringify(current));
     }, [key, current]);
-    console.log(current)
     return [current, setCurrent];
   };
 

@@ -4,6 +4,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import DetailCreate from './DetailCreate';
 
+// this token is scoped only for read, so it is okay for clients to see it
 mapboxgl.accessToken = process.env.REACT_APP_MAP_API_KEY;
 
 const MapCreate = () => {
@@ -11,32 +12,48 @@ const MapCreate = () => {
   const [coordinates, setCoordinates] = useState([]);
   const [route, setRoute] = useState([]);
   const [camps, setCamps] = useState([]);
-  const mapContainerRef = useRef(null);
-  
+  const mapContainerRef = useRef();
+
   const handleRouteChange = (data) => {
-    setRoute(data);
+    if (data.type === 'draw.create') setRoute(data.features[0].geometry.coordinates);
+    if (data.type === 'draw.delete') setRoute([]);
   };
   
   const handleStartChange = ([lng, lat]) => {
     setCoordinates([lng, lat]);
   };
-  
-  // initialize map when component mounts
-  useEffect(() => {
-    
-    const handleCampsChange = (data) => {
-      let blah = camps.concat(data);
-      setCamps(blah);
-      console.log(blah)
-    };
 
+  const handleCampsChange = (data) => {
+    if (data.type === 'draw.create') {
+      setCamps((camps) => {
+        return [...camps, data.features[0].geometry.coordinates]
+      });
+    };
+    if (data.type === 'draw.delete') {
+      setCamps((camps) => {
+        const newCamps = camps.filter((value) => value !== data.features[0].geometry.coordinates);
+        console.log(newCamps)
+        return newCamps;
+      });
+    };
+  };
+
+  // const handleDeleteChange = (data) => {
+  //   console.log(camps)
+  //   setRoute((route) => {
+  //     return route.filter((value) => value !== data.features[0].geometry.coordinates);
+  //   });
+  // };
+    
+    // initialize map when component mounts
+    useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mapbox/outdoors-v11',
       center: [-100, 40],
       zoom: 4,
     });
-
+    
     // add search feature, when queried, map goes to the new location
     map.addControl(new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -59,22 +76,20 @@ const MapCreate = () => {
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-left');
     map.doubleClickZoom.disable();
     map.addControl(draw);
-
+    
     // on a new draw event
     map.on('draw.create', (e) => {
       // if the draw is a string, change route state
-      if (e.features[0].geometry.type === 'LineString') handleRouteChange(e.features[0].geometry.coordinates);
+      if (e.features[0].geometry.type === 'LineString') handleRouteChange(e);
       // if the draw is a point, change camp state
-      if (e.features[0].geometry.type === 'Point') { 
-        const campsites = [e.features[0].geometry.coordinates];
-        handleCampsChange(campsites);
-      };
+      if (e.features[0].geometry.type === 'Point') handleCampsChange(e);
     });
-
+  
     // ****** NEED TO create an event on draw.delete that would delete the line from the database
     map.on('draw.delete', (e) => {
       console.log(e)
-      //handleRouteChange(e.features[0].geometry.coordinates);
+      if (e.features[0].geometry.type === 'LineString') handleRouteChange(e);
+      if (e.features[0].geometry.type === 'Point') handleCampsChange(e);
     });
 
     // new marker, used for starting location
@@ -88,9 +103,9 @@ const MapCreate = () => {
     
     // show marker on double click
     map.on('dblclick', add_marker);
-    
+
     return () => map.remove();
-  }, [camps]);
+  }, []);
 
   return (
     <div className="flex flex-col w-full md:flex-row">

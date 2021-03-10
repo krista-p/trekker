@@ -13,10 +13,9 @@ const DetailCreate = ( { coordinates, route, camps } ) => {
 
   const value = useContext(dataContext);
   const history = useHistory();
-  
+
   // on submit button, add data to db, need to add error handling
   const handleSubmit = async (event) => {
-
     event.preventDefault();
 
     const data = { 
@@ -29,8 +28,10 @@ const DetailCreate = ( { coordinates, route, camps } ) => {
       trailDate: date,
       description: description
     };
-
-    if (coordinates) {
+    if (!days) alert('Please input amount of days before submitting!');
+    if (coordinates.length === 0) alert('Please add starting point before submitting!');
+    if (route.length === 0) alert('Please add route before submitting!');
+    if (coordinates.length > 0 && route.length > 0 && days) {
       const post = {
         method: 'POST',
         headers: {
@@ -72,35 +73,38 @@ const DetailCreate = ( { coordinates, route, camps } ) => {
       <form onSubmit={handleSubmit} >
 
         <div className="p-2" id="geocoder">
-          <label className="font-extrabold text-primary">Starting Point</label>
+          <h2 className="font-extrabold text-primary">Starting Point</h2>
           <p className="text-xs">Double click on map to get starting location.</p>
           <p className="text-xs pb-2">GPS coordinates will appear below.</p>
-          <div className="border-2 border-primary bg-white text-sm">{JSON.stringify(coordinates)}</div>
+          {coordinates[0] !== undefined ? 
+            <p className="border-2 border-primary object-fill bg-white text-sm">{`[${coordinates[1]}, ${coordinates[0]}]`}</p> : 
+            <p className="border-2 border-primary object-fill bg-white text-sm"></p> }
         </div>
 
         <div>
-          <label className="font-extrabold text-primary">Route</label>
+          <h2 className="font-extrabold text-primary">Route</h2>
           <p className="text-xs">Use the line tool on the map to draw your route. Please only use one continuous segment to map the route.</p>
         </div>
 
         <div>
-          <label className="font-extrabold text-primary">Campsites</label>
+          <h2 className="font-extrabold text-primary">Campsites</h2>
           <p className="text-xs">Use the point tool on the map to mark your campsite location(s)</p>
         </div>
 
         <div className="p-2">
-          <label className="p-2 font-extrabold text-primary">Amount of Days</label>
+          <h2 className="p-2 font-extrabold text-primary">Amount of Days</h2>
           <input type="number" value={days} onChange={handleDaysChange} className="border-2 border-primary w-1/6"></input>
         </div>
 
         <div className="p-2">
-          <label className="font-extrabold text-primary">Fees Associated</label>
+          <h2 className="font-extrabold text-primary">Fees Associated</h2>
           <textarea type="text" value={fees} onChange={handleFeesChange} className="border-2 border-primary w-full resize-none" rows='2'></textarea>
         </div>
 
         <div className="p-2">
-          <label className="p-2 font-extrabold text-primary">Trail Type</label>
-          <select value={type} onChange={handleTypeChange} className="border-2 border-primary" name="type">
+          <h2 className="p-2 font-extrabold text-primary">Trail Type</h2>
+          <select name='type' onChange={handleTypeChange} className="border-2 border-primary">
+            <option value=''>Choose one</option>
             <option value="On Trail">On Trail</option>
             <option value="Off Trail">Off Trail</option>
             <option value="Mix of Both">Mix of Both</option>
@@ -108,7 +112,7 @@ const DetailCreate = ( { coordinates, route, camps } ) => {
         </div>
 
         <div className="p-2">
-          <label className="p-2 font-extrabold text-primary">Time of Year</label>
+          <h2 className="p-2 font-extrabold text-primary">Time of Year</h2>
           <input type="month" value={date} onChange={handleDateChange} className="border-2 border-primary w-1/2"></input>
         </div>
 
