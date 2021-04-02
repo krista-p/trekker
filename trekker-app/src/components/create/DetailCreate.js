@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useHistory } from "react-router";
 import { dataContext } from "../../contexts/dataContext";
 
+const backendURL = process.env.DATABASE_URL;
 
 const DetailCreate = ( { coordinates, route, camps } ) => {
 
@@ -39,7 +40,7 @@ const DetailCreate = ( { coordinates, route, camps } ) => {
         },
         body: JSON.stringify(data),
       };
-      await fetch('http://localhost:5000/api', post)
+      await fetch(`${backendURL}/api`, post)
         .then((data) => data.json())
         .then((newTrip) => {
           value.setTrips(value.trips.concat(newTrip));

@@ -34,7 +34,7 @@ const Detail = () => {
 
       <div className="p-2">
         <h2 className="p-2 font-extrabold text-primary">Fees Associated</h2>
-        {value.current.fees ? <p className="break-all">{value.current.fees}</p> : null}
+        {value.current.fees ? <p className="break-word">{value.current.fees}</p> : null}
       </div>
 
       <div className="flex flex-row justify-center">
@@ -51,7 +51,7 @@ const Detail = () => {
 
       <div className="p-2">
         <h2 className="p-2 font-extrabold text-primary">Description</h2>
-        {value.current.description ? <p className="break-all">{value.current.description}</p> : null}
+        {value.current.description ? <p className="break-word">{value.current.description}</p> : null}
       </div>
       
     </div>

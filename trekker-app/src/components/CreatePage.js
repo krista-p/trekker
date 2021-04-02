@@ -14,12 +14,3 @@ const CreatePage = () => {
 }
 
 export default CreatePage;
-
-/*
-    <div className="flex flex-col h-screen w-screen overflow-hidden"> 
-      <Navbar />
-      <div className="flex-1 flex f-full w-screen overflow-hidden">
-        <MapCreate className="w-full" />
-      </div>
-    </div>
-*/
