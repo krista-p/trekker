@@ -19,7 +19,7 @@ Trekker is a community based website in which users can draw out routes for back
 **Draw a Route:** Users can start their route by double clicking on the map to show the starting location marker. Then the user can use the map tools to draw lines for their route. The points are used for locating campsites along their routes. The user can also add important information related to their routes.
 ![Create Page for Trekker](./screenshots/drawroute.png "Trekker Create Route")
 
-###Trekker Video
+### Trekker Video
 [![Trekker Video](http://img.youtube.com/vi/3yGpr5h5eoc/0.jpg)](http://www.youtube.com/watch?v=3yGpr5h5eoc "Trekker Video")
 
 ## Getting Started
