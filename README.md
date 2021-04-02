@@ -14,9 +14,9 @@ If a user wants to log a new route, they can press the "Add A Trip" button, and 
 ![Create Page](./screenshots/createroute.png "Trekker Create Trip Page")
 
 Users can start their route by double clicking on their starting location on the map. This creates a marker. Then the user can use the map tools to draw lines for their route. The points are used for locating campsites along their routes. The user can also add important information related to their routes.
-![Create Page for Trekker](./screenshots/createroute.png "Trekker Create Route")
+![Create Page for Trekker](./screenshots/drawroute.png "Trekker Create Route")
 
-[![Trekker Video](https://www.youtube.com/watch?v=3yGpr5h5eoc)](https://www.youtube.com/watch?v=3yGpr5h5eoc)
+[![Trekker Video](http://img.youtube.com/vi/3yGpr5h5eoc/0.jpg)](http://www.youtube.com/watch?v=3yGpr5h5eoc "Trekker Video")
 
 ## Getting Started
 
@@ -46,14 +46,14 @@ Users can start their route by double clicking on their starting location on the
 
 ## Tech Stack
 
-# Frontend
+### Frontend
 * [React](https://reactjs.org/)
 * [Mapbox](https://docs.mapbox.com/)
 * [MapboxGL-Geocoder](https://github.com/mapbox/mapbox-gl-geocoder)
 * [MapboxGL-Draw](https://github.com/mapbox/mapbox-gl-draw/)
 * [TailwindCSS](https://tailwindcss.com/)
 
-# Backend
+### Backend
 * [Express](https://expressjs.com/)
 * [MongoDB](https://docs.mongodb.com/)
 * [MongooseJS](https://mongoosejs.com/docs/guide.html)
