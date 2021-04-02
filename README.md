@@ -1,22 +1,24 @@
-## Trekker
+# Trekker
 
-There are many website out there that provide backpacking trips for very popular routes. There are not many options for those who go backpacking to get away from the crowds.
-Enter trekker! Users would be able to draw out routes for backpacking trips that they have completed. Users can then search the location and find options for backpacking routes that may not be as popular!
+For my senior portion of Codeworks, I was tasked with creating a web application in 7 days.
+### Enter Trekker!
+Trekker is a community based website in which users can draw out routes for backpacking trips that they have completed. Users can then search the location and find options for backpacking routes that may not be as popular!
 
-A user would go to the landing page and be able to find previously entered routes. They are able to search locations within the map and get more details about a trip.
+**Landing Page:** users can search locations within the map and get more details about a trip.
 ![Landing Page for Trekker](./screenshots/landingpage.png "Trekker Landing Page")
+**Landing Page with Details**
 ![Landing Page Detail](./screenshots/landingdetail.png "Trekker Landing Page with Details")
 
-When the user finds the route that fits their preferences, they can go to the detail page for more information.
+**Trip Detail Page** 
 ![Route Page](./screenshots/routedetail.png "Route Detail Page")
 
-If a user wants to log a new route, they can press the "Add A Trip" button, and are redirected to the create page.
+**Create a Trip:** If a user wants to log a new route, they can press the "Add A Trip" button, and are redirected to the create page.
 ![Create Page](./screenshots/createroute.png "Trekker Create Trip Page")
 
-Users can start their route by double clicking on their starting location on the map. This creates a marker. Then the user can use the map tools to draw lines for their route. The points are used for locating campsites along their routes. The user can also add important information related to their routes.
+**Draw a Route:** Users can start their route by double clicking on the map to show the starting location marker. Then the user can use the map tools to draw lines for their route. The points are used for locating campsites along their routes. The user can also add important information related to their routes.
 ![Create Page for Trekker](./screenshots/drawroute.png "Trekker Create Route")
 
-### Trekker Video
+**Trekker Video**
 [![Trekker Video](http://img.youtube.com/vi/3yGpr5h5eoc/0.jpg)](http://www.youtube.com/watch?v=3yGpr5h5eoc "Trekker Video")
 
 ## Getting Started
