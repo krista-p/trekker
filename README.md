@@ -1,4 +1,4 @@
-## trekker
+## Trekker
 
 There are many website out there that provide backpacking trips for very popular routes. There are not many options for those who go backpacking to get away from the crowds.
 Enter trekker! Users would be able to draw out routes for backpacking trips that they have completed. Users can then search the location and find options for backpacking routes that may not be as popular!
@@ -16,6 +16,7 @@ If a user wants to log a new route, they can press the "Add A Trip" button, and 
 Users can start their route by double clicking on their starting location on the map. This creates a marker. Then the user can use the map tools to draw lines for their route. The points are used for locating campsites along their routes. The user can also add important information related to their routes.
 ![Create Page for Trekker](./screenshots/drawroute.png "Trekker Create Route")
 
+### Trekker Video
 [![Trekker Video](http://img.youtube.com/vi/3yGpr5h5eoc/0.jpg)](http://www.youtube.com/watch?v=3yGpr5h5eoc "Trekker Video")
 
 ## Getting Started
